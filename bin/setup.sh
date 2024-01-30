@@ -22,7 +22,7 @@ echo "export GITHUB_ACCOUNT=$GITHUB_ACCOUNT" >> ~/.bashrc
 echo 'export PS1="\[\e]0;\u:\W\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ "' >> ~/.bashrc
 
 echo "Installing Python depenencies..."
-source ~/backend-pics-venv/bin/activate && python3 -m pip install --upgrade pip wheel
+source ~/backend-pics-venv/bin/ && python3 -m pip install --upgrade pip wheel
 source ~/backend-pics-venv/bin/activate && pip install -r requirements.txt
 echo "source ~/backend-pics-venv/bin/activate" >> ~/.bashrc
 

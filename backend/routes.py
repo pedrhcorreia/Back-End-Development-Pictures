@@ -35,7 +35,10 @@ def count():
 ######################################################################
 @app.route("/picture", methods=["GET"])
 def get_pictures():
-    pass
+    if data:
+        return data, 200
+
+    return {"message": "Internal server error"}, 500
 
 ######################################################################
 # GET A PICTURE
@@ -44,15 +47,36 @@ def get_pictures():
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pass
-
+    if data: 
+        for items in data:
+            if items['id'] == id:
+                return items,200
+        return {"message": "Not found"}, 404        
+    return {"message": "Internal server error"}, 500
 
 ######################################################################
 # CREATE A PICTURE
 ######################################################################
 @app.route("/picture", methods=["POST"])
 def create_picture():
-    pass
+    if request.json:
+        formatted_data = {
+            'id': request.json['id'],
+            'pic_url': request.json['pic_url'],
+            'event_country': request.json['event_country'],
+            'event_state': request.json['event_state'],
+            'event_city': request.json['event_city'],
+            'event_date': request.json['event_date']
+        }
+        for picture in data:
+            if picture['id'] == formatted_data['id']:
+                picture_id = picture['id']
+                return {f"Message": f"picture with id {picture_id} already present"}, 302
+        data.append(formatted_data)        
+        return formatted_data, 201
+    return {"message": "Internal server error"}, 500               
+
+    
 
 ######################################################################
 # UPDATE A PICTURE
@@ -61,11 +85,31 @@ def create_picture():
 
 @app.route("/picture/<int:id>", methods=["PUT"])
 def update_picture(id):
-    pass
+    if request.json:
+        formatted_data = {
+            'pic_url': request.json['pic_url'],
+            'event_country': request.json['event_country'],
+            'event_state': request.json['event_state'],
+            'event_city': request.json['event_city'],
+            'event_date': request.json['event_date']
+        }
+        for picture in data:
+            if picture['id'] == id:
+                picture['pic_url'] = formatted_data['pic_url']
+                picture['event_country'] = formatted_data['event_country']
+                picture['event_state'] = formatted_data['event_state']
+                picture['event_city'] = formatted_data['event_city']
+                picture['event_date'] = formatted_data['event_date']
+                return picture, 200
+        return {"message": "picture not found"}, 404
 
 ######################################################################
 # DELETE A PICTURE
 ######################################################################
 @app.route("/picture/<int:id>", methods=["DELETE"])
 def delete_picture(id):
-    pass
+    for picture in data:
+        if picture['id'] == id:
+            data.remove(picture)
+            return {},204
+    return {"message": "picture not found"}, 404        
